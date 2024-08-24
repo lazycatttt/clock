@@ -6,10 +6,10 @@ SoftwareSerial BTSerial(9, 8); // RX, TX
 uRTCLib rtc(0x68);
 int state;
 int rt;
-int h;
+int h,m,s;
 
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   BTSerial.begin(9600);
   URTCLIB_WIRE.begin();
   //rtc.set(0, 00, 20, 5, 13, 1, 22);// rtc.set(second, minute, hour, dayOfWeek, dayOfMonth, month, year)
@@ -31,13 +31,19 @@ void loop() {
     receivedString.trim();
     //Serial.print("Received: ");
     //Serial.println(receivedString);
-    rt = 4;//alarm set
-   if(receivedString.equals("snk")){
+    rt = 4;
+    int mi = 30;
+    state = 1;//alarm set
+     if(receivedString.equals("snk")){
             rtc.set(00, 00, 20, 5, 13, 1, 22);
             BTSerial.write("snk-ok\n");
     }//snk rtc
     else if(receivedString.equals("rtc")){
       BTSerial.print(h);
+      BTSerial.write("\n");
+      BTSerial.print(m);
+      BTSerial.write("\n");
+      BTSerial.print(s);
       BTSerial.write("\n");
     }
      else if (receivedString.equals("alon")) {
@@ -51,8 +57,10 @@ void loop() {
     if(state==1){
       if(rtc.hour() == rt){
         //Serial.println("ALARM IS ONN");
+        if(rtc.minute() == mi){
         digitalWrite(11,0);
         digitalWrite(10,0);
+        }
       }
       else{
         digitalWrite(11,1);
@@ -66,4 +74,6 @@ void loop() {
       }
   }
   h = rtc.hour();
+  m =  rtc.minute();
+  s= rtc.second();
 }
