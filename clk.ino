@@ -32,7 +32,7 @@ void loop() {
     //Serial.print("Received: ");
     //Serial.println(receivedString);
     rt = 4;//alarm set
-    else if(receivedString.equals("snk")){
+   if(receivedString.equals("snk")){
             rtc.set(00, 00, 20, 5, 13, 1, 22);
             BTSerial.write("snk-ok\n");
     }//snk rtc
